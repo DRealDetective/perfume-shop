@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Order;
 
 class Product extends Model
 {
-    // App\Models\Product.php
-protected $fillable = ['name', 'price'];
+    protected $fillable = ['name', 'price'];
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
 }
