@@ -5,6 +5,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
+
 
 
 /*
@@ -12,9 +15,17 @@ use Illuminate\Database\Eloquent\Model;
 | Public
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('welcome');
-});
+
+// Keep these for shop
+Route::get('/', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/products/{product}', [ShopController::class, 'show'])->name('shop.show');
+
+// Only CartController handles cart
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{product}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
 
 /*
 |--------------------------------------------------------------------------

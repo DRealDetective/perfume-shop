@@ -37,9 +37,10 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         @if($product->image)
-                                            <img src="{{ asset('uploads/products/' . $product->image) }}" 
-                                                 class="me-3 rounded-3 shadow-sm" 
-                                                 style="width: 45px; height: 45px; object-fit: cover; border: 1px solid #eee;">
+                                            <img src="{{ asset('storage/' . $product->image) }}" 
+                                            class="me-3 rounded-3 shadow-sm" 
+                                            style="width: 45px; height: 45px; object-fit: cover; border: 1px solid #eee;">
+
                                         @else
                                             <div class="icon-box me-3 bg-light text-primary" style="width: 45px; height: 45px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
                                                 <i class="bi bi-droplet"></i>

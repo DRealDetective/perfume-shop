@@ -30,16 +30,29 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
    public function store(Request $request)
-    {
-        $request->validate([
-            'name'  => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-        ]);
+{
+    $data = $request->validate([
+        'name'  => 'required|string|max:255',
+        'price' => 'required|numeric|min:0',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        Product::create($request->only(['name', 'price']));
+    // Handle image upload
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $image->storeAs('uploads/products', $imageName, 'public');
 
-        return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
+        $data['image'] = $imageName; // 👈 NOW this actually matters
     }
+
+    Product::create($data);
+
+    return redirect()
+        ->route('admin.products.index')
+        ->with('success', 'Product created successfully!');
+}
+
 
     /**
      * Display the specified resource.
@@ -65,7 +78,20 @@ public function update(Request $request, $id)
     $request->validate([
         'name' => 'required|string|max:255',
         'price' => 'required|numeric|min:0',
+        'image' => 'nullable|image|max:2048'
+
     ]);
+    // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image) {
+                \Storage::disk('public')->delete($product->image);
+            }
+
+            $path = $request->file('image')->store('uploads/products', 'public');
+            $validated['image'] = $path;
+        }
+    
 
     $product->update($request->only(['name', 'price']));
 

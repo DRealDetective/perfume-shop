@@ -56,10 +56,12 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $order = Order::findOrFail($id); // fetch single order
+        return view('admin.order_detail', compact('order'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
