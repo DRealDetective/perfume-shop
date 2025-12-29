@@ -10,6 +10,7 @@ class AdminAuth
     public function handle(Request $request, Closure $next)
     {
         if (!$request->session()->has('admin_id')) {
+             dd('no admin session — redirecting'); // debug!
             return redirect()->route('admin.login')->with('error', 'Please login first');
         }
 

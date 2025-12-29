@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    use App\Models\Order;
 
     public function index()
     {
         $orders = Order::latest()->get();
-        return view('admin.orders.index', compact('orders'));
+       // dd($orders);
+        return view('admin.orders', compact('orders'));
     }
 
 
@@ -29,7 +31,6 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    use App\Models\Order;
 
     public function store(Request $request)
     {
@@ -47,7 +48,7 @@ class OrderController extends Controller
 
         // 3️⃣ Redirect
         return redirect()
-            ->route('orders.index')
+            ->route('admin.orders.index')
             ->with('success', 'Order created successfully');
     }
 
@@ -63,24 +64,47 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        return view('admin.orders.edit', compact('order'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+    public function update(Request $request, $id)
+{
+    $order = Order::findOrFail($id);
+
+    $validated = $request->validate([
+        'fullname' => 'required|string|max:255',
+        'phone'    => 'required|string|max:30',
+        'email'    => 'required|email',
+        'address'  => 'required|string',
+        'total'    => 'required|numeric|min:0',
+    ]);
+
+    $order->update($validated);
+
+    return redirect()
+        ->route('admin.orders.index')
+        ->with('success', 'Order updated successfully');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy($id)
+{
+    $order = Order::findOrFail($id);
+    $order->delete();
+
+    return redirect()
+        ->route('admin.orders.index')
+        ->with('success', 'Order deleted successfully');
+}
+
 }
