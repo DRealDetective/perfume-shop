@@ -24,20 +24,24 @@ class CartController extends Controller
     public function addToCart(Product $product)
 {
     $cart = session()->get('cart', []);
-    
-    if(isset($cart[$product->id])){
+
+    if (isset($cart[$product->id])) {
         $cart[$product->id]['quantity']++;
     } else {
         $cart[$product->id] = [
-            "name" => $product->name,
-            "quantity" => 1,
-            "price" => $product->price
+            'name'     => $product->name,
+            'price'    => $product->price,
+            'quantity' => 1,
+            'image'    => $product->image ?? null,
         ];
     }
 
     session()->put('cart', $cart);
 
-    return response()->json(['cart' => $cart]);
+    return response()->json([
+        'success' => true,
+        'cart' => $cart
+    ]);
 }
 
 

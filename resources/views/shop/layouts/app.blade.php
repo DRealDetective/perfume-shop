@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Luxury Perfumes | Excellence in Fragrance</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,6 +16,7 @@
 @endif
 
     <style>
+        
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --soft-purple: #f7f6ff;
@@ -83,6 +86,24 @@
         }
 
         .ls-1 { letter-spacing: 1px; }
+        /* Minicart */
+        .mini-cart {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -10px 0 30px rgba(0,0,0,.1);
+    padding: 20px;
+    transition: right .3s ease;
+    z-index: 9999;
+}
+
+.mini-cart.open {
+    right: 0;
+}
+
     </style>
 </head>
 <body>
@@ -102,28 +123,13 @@
                         <a class="nav-link fw-semibold px-3" href="{{ route('shop.index') }}">Collection</a>
                     </li>
                     <li class="nav-item dropdown">
-    <a class="nav-link position-relative px-3" href="#" id="cartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-bag fs-5"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-            {{ session('cart') ? count(session('cart')) : 0 }}
-        </span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 300px;" aria-labelledby="cartDropdown">
-        @if(session('cart') && count(session('cart')) > 0)
-            @foreach(session('cart') as $id => $item)
-                <li class="d-flex justify-content-between mb-2">
-                    <span>{{ $item['name'] }}</span>
-                    <span>${{ number_format($item['price'], 2) }} x {{ $item['quantity'] }}</span>
-                </li>
-            @endforeach
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <a href="{{ route('cart.index') }}" class="btn btn-primary w-100">View Cart / Checkout</a>
-            </li>
-        @else
-            <li class="text-center text-muted">Your cart is empty</li>
-        @endif
-    </ul>
+    <a class="nav-link position-relative px-3" href="#" id="cartDropdown">
+    <i class="bi bi-bag fs-5"></i>
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+        {{ session('cart') ? count(session('cart')) : 0 }}
+    </span>
+</a>
+
 </li>
 
 
@@ -142,6 +148,81 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <div id="mini-cart" class="mini-cart shadow-lg border-0">
+    <div class="mini-cart-header d-flex justify-content-between align-items-center p-4 border-bottom">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-bag text-primary fs-5"></i>
+            <h6 class="fw-bold mb-0 text-dark text-uppercase ls-1 small">Your Selection</h6>
+        </div>
+        <button onclick="closeMiniCart()" class="btn-close shadow-none" style="font-size: 0.8rem;"></button>
+    </div>
+
+    <div id="mini-cart-body" class="p-4" style="max-height: 400px; overflow-y: auto;">
+        </div>
+
+    <div class="p-4 border-top bg-white mt-auto">
+        <a href="{{ route('cart.index') }}" class="btn btn-luxury w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
+            <span>View Full Cart</span>
+            <i class="bi bi-arrow-right small"></i>
+        </a>
+    </div>
+</div>
+
+<style>
+    .mini-cart {
+        position: fixed;
+        right: -400px; /* Hidden by default */
+        top: 0;
+        width: 350px;
+        height: 100vh;
+        background: #fff;
+        z-index: 1050;
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mini-cart.active {
+        right: 0;
+    }
+
+    .mini-cart-header {
+        background: #fff;
+    }
+
+    /* Custom Scrollbar for Luxury Feel */
+    #mini-cart-body::-webkit-scrollbar {
+        width: 5px;
+    }
+    #mini-cart-body::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    #mini-cart-body::-webkit-scrollbar-thumb {
+        background: #e0e0e0;
+        border-radius: 10px;
+    }
+
+    .ls-1 { letter-spacing: 1px; }
+
+    /* Button consistent with shop-side style */
+    .btn-luxury {
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    .btn-luxury:hover {
+        opacity: 0.95;
+        transform: translateY(-2px);
+        color: white;
+    }
+</style>
+    
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/shop.js') }}"></script>
 </body>
 </html>

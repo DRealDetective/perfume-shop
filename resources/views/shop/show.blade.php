@@ -46,21 +46,30 @@
                     </p>
                 </div>
 
-                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="mt-5">
-                    @csrf
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label for="quantity" class="text-muted xx-small text-uppercase fw-bold ls-1 d-block mb-2">Quantity</label>
-                            <div class="input-group border rounded-pill overflow-hidden bg-light" style="border-color: #eee !important;">
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" 
-                                       class="form-control border-0 bg-transparent text-center fw-bold" 
-                                       style="box-shadow: none;">
-                            </div>
-                        </div>
-                        <div class="col-md-8 d-flex align-items-end">
-                            <button type="submit" class="btn btn-luxury w-100 py-3 shadow-sm">
-                                <i class="bi bi-bag-plus me-2"></i> Add to Cart
-                            </button>
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart mt-5">
+    @csrf
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label for="quantity" class="text-muted xx-small text-uppercase fw-bold ls-1 d-block mb-2">Quantity</label>
+            <div class="input-group border rounded-pill overflow-hidden bg-light" style="border-color: #eee !important;">
+                <input type="number" name="quantity" id="quantity" value="1" min="1" 
+                       class="form-control border-0 bg-transparent text-center fw-bold" 
+                       style="box-shadow: none;">
+            </div>
+        </div>
+        <div class="col-md-8 d-flex align-items-end">
+            <button type="submit" class="btn btn-luxury w-100 py-3 shadow-sm">
+                <i class="bi bi-bag-plus me-2"></i> Add to Cart
+            </button>
+        </div>
+    </div>
+</form>
+
+</form>
+
+
+
+
                         </div>
                     </div>
                 </form>
